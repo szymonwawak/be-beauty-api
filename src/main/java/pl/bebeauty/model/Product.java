@@ -1,7 +1,8 @@
 package pl.bebeauty.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -9,6 +10,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "products")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, scope = Product.class, property = "id")
 public class Product {
     private long id;
     private String name;
@@ -16,7 +18,8 @@ public class Product {
     private String description;
     private Integer volume;
     private Byte averageScore;
-    private Byte accepted;
+    private Boolean accepted;
+    private Integer barcode;
     private User user;
     private Collection<Comment> comments;
     private Collection<Ingredient> ingredients;
@@ -83,12 +86,22 @@ public class Product {
 
     @Basic
     @Column(name = "accepted")
-    public Byte getAccepted() {
+    public Boolean getAccepted() {
         return accepted;
     }
 
-    public void setAccepted(Byte accepted) {
+    public void setAccepted(Boolean accepted) {
         this.accepted = accepted;
+    }
+
+    @Basic
+    @Column(name = "barcode")
+    public Integer getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(Integer barcode) {
+        this.barcode = barcode;
     }
 
     @Override
@@ -111,7 +124,7 @@ public class Product {
     }
 
     @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "users_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "users_id", referencedColumnName = "id")
     public User getUser() {
         return user;
     }
@@ -120,7 +133,7 @@ public class Product {
         this.user = user;
     }
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     public Collection<Comment> getComments() {
         return comments;
     }

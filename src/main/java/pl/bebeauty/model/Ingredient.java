@@ -1,11 +1,15 @@
 package pl.bebeauty.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
 
 @Entity
 @Table(name = "ingredients")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Ingredient {
     private long id;
     private String name;
@@ -68,7 +72,7 @@ public class Ingredient {
         this.features = features;
     }
 
-    @ManyToMany(mappedBy = "ingredients")
+    @ManyToMany(mappedBy = "ingredients", fetch = FetchType.LAZY)
     public Collection<Product> getProducts() {
         return products;
     }
