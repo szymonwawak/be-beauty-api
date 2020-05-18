@@ -39,7 +39,12 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    void delete(@PathVariable  Long id) {
+    void delete(@PathVariable Long id) {
         repository.deleteById(id);
+    }
+
+    @PostMapping("/findByBarcode")
+    Product getByBarcode(@RequestBody String barcode) {
+        return repository.findByBarcode(barcode);
     }
 }

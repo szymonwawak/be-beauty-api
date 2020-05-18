@@ -1,7 +1,6 @@
 package pl.bebeauty.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -15,8 +14,9 @@ public class Ingredient {
     private long id;
     private String name;
     private Byte accepted;
+    private String effect;
+    private String description;
     private Collection<Product> products;
-    private Collection<Feature> features;
 
     @Id
     @Column(name = "id")
@@ -36,6 +36,26 @@ public class Ingredient {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Basic
+    @Column(name = "effect")
+    public String getEffect() {
+        return effect;
+    }
+
+    public void setEffect(String effect) {
+        this.effect = effect;
+    }
+
+    @Basic
+    @Column(name = "description")
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Basic
@@ -61,17 +81,6 @@ public class Ingredient {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, accepted);
-    }
-
-    @ManyToMany
-    @JoinTable(name = "ingredient_features", catalog = "", schema = "be_beauty", joinColumns = @JoinColumn(name = "ingredients_id", referencedColumnName = "id", nullable = false), inverseJoinColumns = @JoinColumn(name = "features_id", referencedColumnName = "id", nullable = false))
-    @JsonIgnoreProperties("features")
-    public Collection<Feature> getFeatures() {
-        return features;
-    }
-
-    public void setFeatures(Collection<Feature> features) {
-        this.features = features;
     }
 
     @ManyToMany(mappedBy = "ingredients", fetch = FetchType.LAZY)
