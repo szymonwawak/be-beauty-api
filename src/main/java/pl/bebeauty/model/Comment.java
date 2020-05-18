@@ -1,6 +1,7 @@
 package pl.bebeauty.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -73,6 +74,7 @@ public class Comment {
 
     @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "users_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnoreProperties(value = {"products", "user"})
     public User getUser() {
         return user;
     }

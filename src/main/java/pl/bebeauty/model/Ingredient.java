@@ -1,6 +1,7 @@
 package pl.bebeauty.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -64,6 +65,7 @@ public class Ingredient {
 
     @ManyToMany
     @JoinTable(name = "ingredient_features", catalog = "", schema = "be_beauty", joinColumns = @JoinColumn(name = "ingredients_id", referencedColumnName = "id", nullable = false), inverseJoinColumns = @JoinColumn(name = "features_id", referencedColumnName = "id", nullable = false))
+    @JsonIgnoreProperties("features")
     public Collection<Feature> getFeatures() {
         return features;
     }

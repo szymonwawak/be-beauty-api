@@ -1,7 +1,7 @@
 package pl.bebeauty.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -19,8 +19,9 @@ public class Product {
     private Integer volume;
     private Byte averageScore;
     private Boolean accepted;
-    private Integer barcode;
+    private String barcode;
     private User user;
+    private Category category;
     private Collection<Comment> comments;
     private Collection<Ingredient> ingredients;
 
@@ -96,11 +97,11 @@ public class Product {
 
     @Basic
     @Column(name = "barcode")
-    public Integer getBarcode() {
+    public String getBarcode() {
         return barcode;
     }
 
-    public void setBarcode(Integer barcode) {
+    public void setBarcode(String barcode) {
         this.barcode = barcode;
     }
 
@@ -134,6 +135,7 @@ public class Product {
     }
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("products")
     public Collection<Comment> getComments() {
         return comments;
     }
@@ -142,8 +144,20 @@ public class Product {
         this.comments = comments;
     }
 
+    @ManyToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "categories_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnoreProperties("products")
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     @ManyToMany
     @JoinTable(name = "product_ingredients", catalog = "", schema = "be_beauty", joinColumns = @JoinColumn(name = "products_id", referencedColumnName = "id", nullable = false), inverseJoinColumns = @JoinColumn(name = "ingredients_id", referencedColumnName = "id", nullable = false))
+    @JsonIgnoreProperties("products")
     public Collection<Ingredient> getIngredients() {
         return ingredients;
     }
