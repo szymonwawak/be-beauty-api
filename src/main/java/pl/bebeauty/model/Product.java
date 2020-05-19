@@ -27,6 +27,7 @@ public class Product {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
         return id;
     }
@@ -144,7 +145,7 @@ public class Product {
         this.comments = comments;
     }
 
-    @ManyToOne(cascade = {CascadeType.ALL})
+    @ManyToOne
     @JoinColumn(name = "categories_id", referencedColumnName = "id", nullable = false)
     @JsonIgnoreProperties("products")
     public Category getCategory() {
