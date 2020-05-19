@@ -20,7 +20,6 @@ public class Product {
     private Byte averageScore;
     private Boolean accepted;
     private String barcode;
-    private User user;
     private Category category;
     private Collection<Comment> comments;
     private Collection<Ingredient> ingredients;
@@ -123,16 +122,6 @@ public class Product {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, manufacturer, description, volume, averageScore, accepted);
-    }
-
-    @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "users_id", referencedColumnName = "id")
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)

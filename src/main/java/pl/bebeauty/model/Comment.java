@@ -15,7 +15,6 @@ public class Comment {
     private Short score;
     private String opinion;
     private Product product;
-    private User user;
 
     @Id
     @Column(name = "id")
@@ -70,16 +69,5 @@ public class Comment {
 
     public void setProduct(Product product) {
         this.product = product;
-    }
-
-    @ManyToOne(cascade = {CascadeType.ALL})
-    @JoinColumn(name = "users_id", referencedColumnName = "id", nullable = false)
-    @JsonIgnoreProperties(value = {"products", "user"})
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }
