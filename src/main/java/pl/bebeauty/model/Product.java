@@ -97,7 +97,7 @@ public class Product {
         return Objects.hash(id, name, manufacturer, description, averageScore);
     }
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.MERGE)
     @JsonIgnoreProperties("product")
     public List<Comment> getComments() {
         return comments;
