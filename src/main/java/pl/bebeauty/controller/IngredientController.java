@@ -1,10 +1,16 @@
 package pl.bebeauty.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import pl.bebeauty.model.Category;
 import pl.bebeauty.model.Ingredient;
+import pl.bebeauty.model.Product;
 import pl.bebeauty.repository.IngredientRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -41,5 +47,13 @@ public class IngredientController {
     @DeleteMapping("/{id}")
     void delete(@PathVariable Long id) {
         repository.deleteById(id);
+    }
+
+    @PostMapping("/search")
+    List<Ingredient> findByName(@RequestPart(required = false) String name, int pageNumber, int pageSize) {
+        name = name == null ? "" : name;
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<Ingredient> ingredients = repository.findByNameContainingOrderByName(name, pageable);
+        return ingredients.getContent();
     }
 }

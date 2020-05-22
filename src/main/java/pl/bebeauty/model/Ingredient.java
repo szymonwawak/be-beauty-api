@@ -1,8 +1,8 @@
 package pl.bebeauty.model;
 
  import javax.persistence.*;
-import java.util.Collection;
-import java.util.Objects;
+ import java.util.List;
+ import java.util.Objects;
 
 @Entity
 @Table(name = "ingredients")
@@ -12,7 +12,7 @@ public class Ingredient {
     private Byte accepted;
     private String effect;
     private String description;
-    private Collection<Product> products;
+    private List<Product> products;
 
     @Id
     @Column(name = "id")
@@ -80,11 +80,11 @@ public class Ingredient {
     }
 
     @ManyToMany(mappedBy = "ingredients", fetch = FetchType.LAZY)
-    public Collection<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(Collection<Product> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
     }
 }

@@ -1,9 +1,9 @@
 package pl.bebeauty.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pl.bebeauty.model.Comment;
 import pl.bebeauty.repository.CommentRepository;
+import pl.bebeauty.service.CommentService;
 
 import java.util.Optional;
 
@@ -12,10 +12,11 @@ import java.util.Optional;
 public class CommentController {
 
     private final CommentRepository repository;
+    private final CommentService commentService;
 
-    @Autowired
-    public CommentController(CommentRepository repository) {
+    public CommentController(CommentRepository repository, CommentService commentService) {
         this.repository = repository;
+        this.commentService = commentService;
     }
 
     @GetMapping
@@ -30,7 +31,9 @@ public class CommentController {
 
     @PostMapping
     Comment create(@RequestBody Comment comment) {
-        return repository.save(comment);
+        repository.save(comment);
+        commentService.setProductTotalScore(comment);
+        return comment;
     }
 
     @PutMapping

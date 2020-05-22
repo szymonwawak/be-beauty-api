@@ -1,7 +1,7 @@
 package pl.bebeauty.model;
 
 import javax.persistence.*;
-import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -9,7 +9,7 @@ import java.util.Objects;
 public class Category {
     private int id;
     private String name;
-    private Collection<Product> products;
+    private List<Product> products;
 
     @Id
     @Column(name = "id")
@@ -46,11 +46,11 @@ public class Category {
     }
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    public Collection<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(Collection<Product> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
     }
 

@@ -1,28 +1,23 @@
 package pl.bebeauty.model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
-import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "products")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, scope = Product.class, property = "id")
 public class Product {
     private long id;
     private String name;
     private String manufacturer;
     private String description;
-    private Integer volume;
-    private Byte averageScore;
-    private Boolean accepted;
+    private Double averageScore;
     private String barcode;
     private Category category;
-    private Collection<Comment> comments;
-    private Collection<Ingredient> ingredients;
+    private List<Comment> comments;
+    private List<Ingredient> ingredients;
 
     @Id
     @Column(name = "id")
@@ -66,33 +61,13 @@ public class Product {
     }
 
     @Basic
-    @Column(name = "volume")
-    public Integer getVolume() {
-        return volume;
-    }
-
-    public void setVolume(Integer volume) {
-        this.volume = volume;
-    }
-
-    @Basic
     @Column(name = "average_score")
-    public Byte getAverageScore() {
+    public Double getAverageScore() {
         return averageScore;
     }
 
-    public void setAverageScore(Byte averageScore) {
+    public void setAverageScore(Double averageScore) {
         this.averageScore = averageScore;
-    }
-
-    @Basic
-    @Column(name = "accepted")
-    public Boolean getAccepted() {
-        return accepted;
-    }
-
-    public void setAccepted(Boolean accepted) {
-        this.accepted = accepted;
     }
 
     @Basic
@@ -114,27 +89,25 @@ public class Product {
                 Objects.equals(name, product.name) &&
                 Objects.equals(manufacturer, product.manufacturer) &&
                 Objects.equals(description, product.description) &&
-                Objects.equals(volume, product.volume) &&
-                Objects.equals(averageScore, product.averageScore) &&
-                Objects.equals(accepted, product.accepted);
+                Objects.equals(averageScore, product.averageScore);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, manufacturer, description, volume, averageScore, accepted);
+        return Objects.hash(id, name, manufacturer, description, averageScore);
     }
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("products")
-    public Collection<Comment> getComments() {
+    @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST)
+    @JsonIgnoreProperties("product")
+    public List<Comment> getComments() {
         return comments;
     }
 
-    public void setComments(Collection<Comment> comments) {
+    public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "categories_id", referencedColumnName = "id", nullable = false)
     @JsonIgnoreProperties("products")
     public Category getCategory() {
@@ -145,14 +118,14 @@ public class Product {
         this.category = category;
     }
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.MERGE})
     @JoinTable(name = "product_ingredients", catalog = "", schema = "be_beauty", joinColumns = @JoinColumn(name = "products_id", referencedColumnName = "id", nullable = false), inverseJoinColumns = @JoinColumn(name = "ingredients_id", referencedColumnName = "id", nullable = false))
     @JsonIgnoreProperties("products")
-    public Collection<Ingredient> getIngredients() {
+    public List<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(Collection<Ingredient> ingredients) {
+    public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 }
